@@ -11,18 +11,22 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useSignUpUserMutation } from "@/store/apiSlice/authApi";
 import { signUpSchema, SignUpSchemaType } from "@/zod-schema/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const [isShowing, setIsShowing] = useState(false);
-  const queries = useSearchParams();
+  const [signUpUser, {isLoading:isSignupLoading}] = useSignUpUserMutation();
+  const router = useRouter();
 
+  const queries = useSearchParams();
   const form = useForm<SignUpSchemaType>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -37,8 +41,16 @@ const SignUp = () => {
     form.setValue("email", queries.get("email") || "");
   },[queries])
 
-  function handleSubmit(values: SignUpSchemaType) {
-    console.log(values);
+  async function handleSubmit(values: SignUpSchemaType) {
+    try{
+      const response = await signUpUser(values).unwrap();
+      toast.success(response.data.message);
+      router.push("/");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    }catch(error:any){
+      toast.error(error.data.message);
+    }
+
   }
 
   return (
@@ -109,7 +121,7 @@ const SignUp = () => {
             type="submit"
             className="w-full flex items-center justify-center"
           >
-            {false ? <ButtonLoader/>:"Sign Up"}
+            {isSignupLoading ? <ButtonLoader/>:"Sign Up"}
             <ArrowRight className="ml-2" size={20} />
           </Button>
         </form>
