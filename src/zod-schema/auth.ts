@@ -32,4 +32,18 @@ export const signUpSchema = z
   });
 
 
+  export const signInSchema = z
+  .object({
+    email: z
+      .string()
+      .trim()
+      .min(1, { message: "Email is required" })
+      .email({ message: "Invalid email address" }),
+    password: z
+      .string()
+      .trim()
+      .min(1, { message: "Password is required" }),
+  })
+
   export type SignUpSchemaType = z.infer<typeof signUpSchema>
+  export type SignInSchemaType = z.infer<typeof signInSchema>
