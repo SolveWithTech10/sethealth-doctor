@@ -52,3 +52,14 @@ export const totalDataCountList = [
       totalNumbers: 30,
     }
   ]
+
+
+  export const weekdays = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];

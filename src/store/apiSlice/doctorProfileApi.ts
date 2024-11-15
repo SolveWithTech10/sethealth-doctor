@@ -4,20 +4,19 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const doctorProfileApi = createApi({
   reducerPath: "doctorProfileApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${baseUrl}/auth`,
+    baseUrl: `${baseUrl}/doctor`,
     credentials: "include",
   }),
   endpoints: (builder) => ({
-    appDoctorProfile: builder.mutation({
+    addDoctorProfile: builder.mutation({
       query: (data) => ({
-        url: "/register",
-        credentials:"include",
+        url: "/profile/new",
+        credentials: "include",
         method: "POST",
         body: data,
       }),
     }),
-   
   }),
 });
 
-export const { useAppDoctorProfileMutation } = doctorProfileApi;
+export const { useAddDoctorProfileMutation } = doctorProfileApi;
